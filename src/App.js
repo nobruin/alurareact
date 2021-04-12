@@ -1,33 +1,48 @@
 import { Component } from "react";
 import NoteList from "./components/NoteList";
 import NoteForm from "./components/NoteForm/";
-import './assets/index.css';
-import './assets/App.css';
+import './assets/css/index.css';
+import './assets/css/App.css';
+import CategoryList from "./components/CategoryList";
 
 class App extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      notes:[]
+      notes: [],
+      categories: []
     };
   }
 
-  createNote(title, description){
-    const note = {"title":title, "description":description};
-    this.setState({notes:[...this.state.notes, note]});
+  createCategory(category) {
+    this.setState({ categories: [...this.state.categories, category] });
   }
 
+  createNote(title, description, category) {
+    const note = { "title": title, "description": description, "category": category };
+    this.setState({ notes: [...this.state.notes, note] });
+  }
 
-  render(){
+  deleteNote(index) {
+    let arrayNotes = this.state.notes;
+    arrayNotes.splice(index, 1);
+    this.setState(arrayNotes);
+  }
+
+  render() {
     return (
       <section className="conteudo">
-      <NoteForm createNote={this.createNote.bind(this)} />
-      <NoteList notes={this.state.notes}/>
-    </section>
+        <NoteForm categories={this.state.categories} createNote={this.createNote.bind(this)} />
+        <main className=",
+        conteudo-principal">
+          <CategoryList categories={this.state.categories} createCategory={this.createCategory.bind(this)}/>
+          <NoteList notes={this.state.notes} deleteNote={this.deleteNote.bind(this)} />
+        </main>
+      </section>
     );
   }
-  
+
 }
 
 export default App;

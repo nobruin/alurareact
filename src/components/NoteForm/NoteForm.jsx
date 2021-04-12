@@ -2,33 +2,50 @@ import React, { Component } from "react";
 import "./style.css";
 
 class NoteForm extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.title = "";
     this.description = "";
+    this.category = "";
   }
 
-  handleChangeTitle(event){
+  handleChangeTitle(event) {
     event.stopPropagation();
     this.title = event.target.value;
   }
 
-  handleChangeText(event){
+  handleChangeText(event) {
     event.stopPropagation();
     this.description = event.target.value;
   }
 
-  create(event){
+  create(event) {
     event.preventDefault();
     event.stopPropagation();
-    this.props.createNote(this.title, this.description);
+    this.props.createNote(this.title, this.description, this.category);
+  }
+
+  handleChangeCategory(event){
+    event.stopPropagation();
+    this.category = event.target.value;
   }
 
   render() {
     return (
-      <form className="form-cadastro " 
+      <form className="form-cadastro "
         onSubmit={this.create.bind(this)}
       >
+        <select 
+        className="form-cadastro_input"
+        onChange={this.handleChangeCategory.bind(this)}
+        >
+          <option value="sem categoria">Sem categoria</option>
+          {this.props.categories.map((category, index) => {
+            return (
+              <option key={index} value={category}>{category}</option>
+            );
+          })}
+        </select>
         <input
           type="text"
           placeholder="Título"
