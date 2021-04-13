@@ -7,6 +7,23 @@ class NoteForm extends Component {
     this.title = "";
     this.description = "";
     this.category = "";
+    this._handlerCategories = this._handlerCategories.bind(this);
+
+    this.state = {
+      categories:[]
+    }
+  }
+
+  componentDidMount() {
+    this.props.categories.handler(this._handlerCategories);
+  }
+
+  componentWillUnmount(){
+    this.props.categories.removeFuncHandler(this._handlerCategories);
+  }
+
+  _handlerCategories(categories) {
+    this.setState({ ...this.state, categories });
   }
 
   handleChangeTitle(event) {
@@ -25,7 +42,7 @@ class NoteForm extends Component {
     this.props.createNote(this.title, this.description, this.category);
   }
 
-  handleChangeCategory(event){
+  handleChangeCategory(event) {
     event.stopPropagation();
     this.category = event.target.value;
   }
@@ -35,14 +52,14 @@ class NoteForm extends Component {
       <form className="form-cadastro "
         onSubmit={this.create.bind(this)}
       >
-        <select 
-        className="form-cadastro_input"
-        onChange={this.handleChangeCategory.bind(this)}
+        <select
+          className="form-cadastro_input"
+          onChange={this.handleChangeCategory.bind(this)}
         >
           <option value="sem categoria">Sem categoria</option>
-          {this.props.categories.map((category, index) => {
+          {this.state.categories.map((category, index) => {
             return (
-              <option key={index} value={category}>{category}</option>
+              <option key={index} value={category.name}>{category.name}</option>
             );
           })}
         </select>
